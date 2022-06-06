@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Player.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">homework-project-kadarkutir</a> &gt; <a href="index.source.html" class="el_package">board</a> &gt; <span class="el_source">Player.java</span></div><h1>Player.java</h1><pre class="source lang-java linenums">package board;
+
+/**
+ * Represents a player.
+ */
+public class Player {
+
+    /**
+     * The side of the player.
+     */
+    private PieceType side;
+
+    /**
+     * The name of the player.
+     */
+    private String name;
+
+    /**
+     * The player won or not.
+     */
+    private boolean won;
+
+    /**
+     * The player moved or not.
+     */
+    private boolean moved;
+
+<span class="fc" id="L28">    public Player(PieceType side, String name, boolean won, boolean moved) {</span>
+<span class="fc" id="L29">        this.side = side;</span>
+<span class="fc" id="L30">        this.name = name;</span>
+<span class="fc" id="L31">        this.won = won;</span>
+<span class="fc" id="L32">        this.moved = moved;</span>
+<span class="fc" id="L33">    }</span>
+
+    /**
+     *{@return the name of the player}
+     */
+    public String getName() {
+<span class="nc" id="L39">        return name;</span>
+    }
+
+    /**
+     * Sets the name of the player.
+     *
+     * @param name a name
+     */
+    public void setName(String name) {
+<span class="nc" id="L48">        this.name = name;</span>
+<span class="nc" id="L49">    }</span>
+
+    /**
+     *{@return whether a player has won or not}
+     */
+    public boolean isWon() {
+<span class="fc" id="L55">        return won;</span>
+    }
+
+    /**
+     * Sets the won parameter of the player.
+     *
+     * @param won a boolean value
+     */
+    public void setWon(boolean won) {
+<span class="nc" id="L64">        this.won = won;</span>
+<span class="nc" id="L65">    }</span>
+
+    /**
+     *{@return whether a player has moved or not}
+     */
+    public boolean isMoved() {
+<span class="nc" id="L71">        return moved;</span>
+    }
+
+    /**
+     * Sets the move parameter of the player.
+     *
+     * @param moved a boolean value
+     */
+    public void setMoved(boolean moved) {
+<span class="nc" id="L80">        this.moved = moved;</span>
+<span class="nc" id="L81">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

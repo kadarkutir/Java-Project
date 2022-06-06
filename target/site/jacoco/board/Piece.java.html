@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Piece.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">homework-project-kadarkutir</a> &gt; <a href="index.source.html" class="el_package">board</a> &gt; <span class="el_source">Piece.java</span></div><h1>Piece.java</h1><pre class="source lang-java linenums">package board;
+
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
+/**
+ * Represents a piece
+ */
+public class Piece {
+
+    /**
+     * The type of the piece.
+     */
+    private final PieceType type;
+
+    /**
+     * The position of the piece.
+     */
+<span class="fc" id="L19">    private final ObjectProperty&lt;Position&gt; position = new SimpleObjectProperty&lt;&gt;();</span>
+
+<span class="fc" id="L21">    public Piece(PieceType type, Position position) {</span>
+<span class="fc" id="L22">        this.type = type;</span>
+<span class="fc" id="L23">        this.position.set(position);</span>
+<span class="fc" id="L24">    }</span>
+
+    /**
+     *{@return the type of the piece}
+     */
+<span class="fc" id="L29">    public PieceType getType() { return type; }</span>
+
+    /**
+     *{@return the position of the piece}
+     */
+    public Position getPosition() {
+<span class="fc" id="L35">        return position.get();</span>
+    }
+
+    public ObjectProperty&lt;Position&gt; positionProperty() {
+<span class="fc" id="L39">        return position;</span>
+    }
+
+    /**
+     * Moves the piece to a given direction.
+     *
+     * @param direction a given direction
+     */
+    public void moveTo(Direction direction) {
+<span class="nc" id="L48">        Position newPosition = position.get().moveTo(direction);</span>
+<span class="nc" id="L49">        position.set(newPosition);</span>
+<span class="nc" id="L50">    }</span>
+
+    @Override
+<span class="fc" id="L53">    public String toString(){ return type.toString() + &quot; &quot; + position; }</span>
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

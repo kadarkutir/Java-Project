@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Position.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">homework-project-kadarkutir</a> &gt; <a href="index.source.html" class="el_package">board</a> &gt; <span class="el_source">Position.java</span></div><h1>Position.java</h1><pre class="source lang-java linenums">package board;
+
+/**
+ * A record for position.
+ *
+ * @param row the value of row
+ * @param col the value of column
+ */
+<span class="fc" id="L9">public record Position(int row, int col) {</span>
+
+    /**
+     * Returns a new position to the given direction.
+     *
+     * @param direction a given direction
+     * @return a new position
+     */
+    public Position moveTo(Direction direction) {
+<span class="fc" id="L18">        return new Position(row + direction.getRowChange(), col + direction.getColChange());</span>
+    }
+
+    /**
+     * {@return the position whose vertical and horizontal distances from this
+     * position are equal to the coordinate changes of the direction given}
+     *
+     * @param direction a given direction
+     */
+    public Position getPositionAt(Direction direction) {
+<span class="fc" id="L28">        return new Position(row + direction.getRowChange(), col + direction.getColChange());</span>
+    }
+
+    public Position getUp() {
+<span class="nc" id="L32">        return getPositionAt(Direction.UP);</span>
+    }
+
+    public Position getRight() {
+<span class="nc" id="L36">        return getPositionAt(Direction.RIGHT);</span>
+    }
+
+    public Position getDown() {
+<span class="fc" id="L40">        return getPositionAt(Direction.DOWN);</span>
+    }
+
+    public Position getLeft() {
+<span class="fc" id="L44">        return getPositionAt(Direction.LEFT);</span>
+    }
+
+<span class="fc" id="L47">    public Position getUpRight() { return getPositionAt(Direction.UP_RIGHT); }</span>
+
+<span class="fc" id="L49">    public Position getUpLeft() { return getPositionAt(Direction.UP_LEFT); }</span>
+
+<span class="nc" id="L51">    public Position getDownRight() { return getPositionAt(Direction.DOWN_RIGHT); }</span>
+
+<span class="nc" id="L53">    public Position getDownLeft() { return getPositionAt(Direction.DOWN_LEFT); }</span>
+
+    public String toString() {
+<span class="fc" id="L56">        return String.format(&quot;(%d,%d)&quot;, row, col);</span>
+    }
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

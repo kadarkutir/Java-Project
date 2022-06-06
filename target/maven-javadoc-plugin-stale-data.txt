@@ -1,0 +1,66 @@
+@options
+@packages
+-classpath
+'/home/kadarkutir/.m2/repository/org/openjfx/javafx-controls/18/javafx-controls-18.jar:/home/kadarkutir/.m2/repository/org/openjfx/javafx-controls/18/javafx-controls-18-linux.jar:/home/kadarkutir/.m2/repository/org/openjfx/javafx-graphics/18/javafx-graphics-18.jar:/home/kadarkutir/.m2/repository/org/openjfx/javafx-graphics/18/javafx-graphics-18-linux.jar:/home/kadarkutir/.m2/repository/org/openjfx/javafx-base/18/javafx-base-18.jar:/home/kadarkutir/.m2/repository/org/openjfx/javafx-base/18/javafx-base-18-linux.jar:/home/kadarkutir/.m2/repository/org/openjfx/javafx-fxml/18/javafx-fxml-18.jar:/home/kadarkutir/.m2/repository/org/openjfx/javafx-fxml/18/javafx-fxml-18-linux.jar:/home/kadarkutir/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar:/home/kadarkutir/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar:/home/kadarkutir/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar:/home/kadarkutir/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar:/home/kadarkutir/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar:/home/kadarkutir/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar:/home/kadarkutir/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar:/home/kadarkutir/.m2/repository/org/tinylog/tinylog-api/2.4.1/tinylog-api-2.4.1.jar:/home/kadarkutir/.m2/repository/org/tinylog/tinylog-impl/2.4.1/tinylog-impl-2.4.1.jar:/home/kadarkutir/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.18/animal-sniffer-annotations-1.18.jar'
+-encoding
+'UTF-8'
+-protected
+--release
+17
+-sourcepath
+'/home/kadarkutir/Project/homework-project-kadarkutir/src/main/java:/home/kadarkutir/Project/homework-project-kadarkutir/target/generated-sources/annotations'
+-author
+-bottom
+'Copyright &#169; 2022. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'homework-project-kadarkutir 1.0 API'
+-use
+-version
+-windowtitle
+'homework-project-kadarkutir 1.0 API'
+gui
+board
+/home/kadarkutir/.m2/repository/org/openjfx/javafx-controls/18/javafx-controls-18.jar = 1652007336925
+/home/kadarkutir/.m2/repository/org/openjfx/javafx-controls/18/javafx-controls-18-linux.jar = 1652007337805
+/home/kadarkutir/.m2/repository/org/openjfx/javafx-graphics/18/javafx-graphics-18.jar = 1652007336701
+/home/kadarkutir/.m2/repository/org/openjfx/javafx-graphics/18/javafx-graphics-18-linux.jar = 1652007338976
+/home/kadarkutir/.m2/repository/org/openjfx/javafx-base/18/javafx-base-18.jar = 1652007336761
+/home/kadarkutir/.m2/repository/org/openjfx/javafx-base/18/javafx-base-18-linux.jar = 1652007337217
+/home/kadarkutir/.m2/repository/org/openjfx/javafx-fxml/18/javafx-fxml-18.jar = 1652007336837
+/home/kadarkutir/.m2/repository/org/openjfx/javafx-fxml/18/javafx-fxml-18-linux.jar = 1652007336985
+/home/kadarkutir/.m2/repository/org/junit/jupiter/junit-jupiter-engine/5.8.2/junit-jupiter-engine-5.8.2.jar = 1650914799226
+/home/kadarkutir/.m2/repository/org/junit/platform/junit-platform-engine/1.8.2/junit-platform-engine-1.8.2.jar = 1650914799230
+/home/kadarkutir/.m2/repository/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar = 1650914799254
+/home/kadarkutir/.m2/repository/org/junit/platform/junit-platform-commons/1.8.2/junit-platform-commons-1.8.2.jar = 1650914799290
+/home/kadarkutir/.m2/repository/org/junit/jupiter/junit-jupiter-api/5.8.2/junit-jupiter-api-5.8.2.jar = 1650914799298
+/home/kadarkutir/.m2/repository/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar = 1650914799350
+/home/kadarkutir/.m2/repository/org/junit/jupiter/junit-jupiter-params/5.8.2/junit-jupiter-params-5.8.2.jar = 1650914799466
+/home/kadarkutir/.m2/repository/org/tinylog/tinylog-api/2.4.1/tinylog-api-2.4.1.jar = 1651964610596
+/home/kadarkutir/.m2/repository/org/tinylog/tinylog-impl/2.4.1/tinylog-impl-2.4.1.jar = 1651964610180
+/home/kadarkutir/.m2/repository/org/codehaus/mojo/animal-sniffer-annotations/1.18/animal-sniffer-annotations-1.18.jar = 1651964610416
+/home/kadarkutir/Project/homework-project-kadarkutir/src/main/java = 1653022384464
+/home/kadarkutir/Project/homework-project-kadarkutir/target/generated-sources/annotations = 1652007130322
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/overview-tree.html = 1653060826161
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/allpackages-index.html = 1653060826189
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/element-list = 1653060826077
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/script.js = 1653060826229
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/allclasses-index.html = 1653060826185
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/jquery-ui.overrides.css = 1653060826237
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/stylesheet.css = 1653060826229
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/tag-search-index.js = 1653060826189
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/constant-values.html = 1653060826105
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/index-all.html = 1653060826221
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/module-search-index.js = 1653060826189
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/type-search-index.js = 1653060826189
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/help-doc.html = 1653060826225
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/package-search-index.js = 1653060826189
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/index.html = 1653060826165
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/member-search-index.js = 1653060826189
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/search.js = 1653060826229
+/home/kadarkutir/Project/homework-project-kadarkutir/target/site/apidocs/overview-summary.html = 1653060826221

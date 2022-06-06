@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Board.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">homework-project-kadarkutir</a> &gt; <a href="index.source.html" class="el_package">board</a> &gt; <span class="el_source">Board.java</span></div><h1>Board.java</h1><pre class="source lang-java linenums">package board;
+
+import javafx.beans.property.ObjectProperty;
+
+import java.util.*;
+
+/**
+ * Represents a board.
+ */
+public class Board {
+
+    /**
+     * Size of the row of the board.
+     */
+    public static final int BOARD_ROW = 5;
+
+    /**
+     * Size of the column of the board.
+     */
+    public static final int BOARD_COL = 4;
+
+    /**
+     * Array of storing the pieces.
+     */
+    private final Piece[] pieces;
+
+    /**
+     * First player object.
+     */
+<span class="fc" id="L30">    Player player1 = new Player(PieceType.BLUE,&quot;player1&quot;,false,false);</span>
+
+    /**
+     * Second player object.
+     */
+<span class="fc" id="L35">    Player player2 = new Player(PieceType.RED,&quot;player2&quot;,false,false);</span>
+
+    /**
+     * Creates a {@code Board} object that corresponds to the original
+     * initial state of the puzzle.
+     */
+    public Board(){
+<span class="fc" id="L42">        this(   new Piece(PieceType.BLUE,new Position(0,0)),</span>
+                new Piece(PieceType.RED,new Position(0,1)),
+                new Piece(PieceType.BLUE,new Position(0,2)),
+                new Piece(PieceType.RED,new Position(0,3)),
+                new Piece(PieceType.RED,new Position(4,0)),
+                new Piece(PieceType.BLUE,new Position(4,1)),
+                new Piece(PieceType.RED,new Position(4,2)),
+                new Piece(PieceType.BLUE,new Position(4,3))
+        );
+<span class="fc" id="L51">    }</span>
+
+    /**
+     * Creates a {@code Board} object initializing the positions of the
+     * pieces with the positions specified. The constructor expects an array of
+     * eight {@code Piece} objects or eight {@code Piece} objects.
+     *
+     * @param pieces the initial positions of the pieces
+     */
+<span class="fc" id="L60">    public Board(Piece... pieces){</span>
+<span class="fc" id="L61">        checkPositions(pieces);</span>
+<span class="fc" id="L62">        this.pieces = pieces;</span>
+<span class="fc" id="L63">    }</span>
+
+    /**
+     * Checks the positions of the pieces.
+     *
+     * @param pieces array of piece
+     */
+    private void checkPositions(Piece[] pieces) {
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (pieces.length != 8) {</span>
+<span class="nc" id="L72">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        for (var piece : pieces) {</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">            if (!isOnBoard(piece.getPosition())) {</span>
+<span class="nc" id="L76">                throw new IllegalArgumentException();</span>
+            }
+        }
+<span class="fc" id="L79">    }</span>
+
+    /**
+     * Returns whether the given position is on the board.
+     *
+     * @param position given position
+     * @return whether the position is on the board
+     */
+    private boolean isOnBoard(Position position) {
+<span class="pc bpc" id="L88" title="1 of 4 branches missed.">        return position.row() &gt;= 0 &amp;&amp; position.row() &lt; BOARD_ROW &amp;&amp;</span>
+<span class="pc bpc" id="L89" title="1 of 4 branches missed.">                position.col() &gt;= 0 &amp;&amp; position.col() &lt; BOARD_COL;</span>
+    }
+
+    /**
+     * Returns whether the where the piece wants to move is valid or not.
+     *
+     * @param pieceNumber the number of the piece
+     * @param direction the direction where the piece wants to move
+     * @return whether the can move to the given direction
+     */
+    public boolean isValidMove(int pieceNumber, Direction direction) {
+<span class="pc bpc" id="L100" title="1 of 4 branches missed.">        if (pieceNumber &lt; 0 || pieceNumber &gt;= pieces.length) {</span>
+<span class="fc" id="L101">            throw new IllegalArgumentException();</span>
+        }
+<span class="fc" id="L103">        Position newPosition = pieces[pieceNumber].getPosition().moveTo(direction);</span>
+<span class="fc bfc" id="L104" title="All 2 branches covered.">        if (!isOnBoard(newPosition)) {</span>
+<span class="fc" id="L105">            return false;</span>
+        }
+<span class="fc bfc" id="L107" title="All 2 branches covered.">        for (var piece : pieces) {</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">            if (piece.getPosition().equals(newPosition)) {</span>
+<span class="fc" id="L109">                return false;</span>
+            }
+        }
+<span class="fc" id="L112">        return true;</span>
+    }
+
+    /**
+     * Returns the valid moves for a piece.
+     *
+     * @param pieceNumber the number of the piece
+     * @return all the valid moves for a piece
+     */
+    public Set&lt;Direction&gt; getValidMoves(int pieceNumber) {
+<span class="fc" id="L122">        EnumSet&lt;Direction&gt; validMoves = EnumSet.noneOf(Direction.class);</span>
+<span class="fc bfc" id="L123" title="All 2 branches covered.">        for (var direction : Direction.values()) {</span>
+<span class="fc bfc" id="L124" title="All 2 branches covered.">            if (isValidMove(pieceNumber, direction)) {</span>
+<span class="fc" id="L125">                validMoves.add(direction);</span>
+            }
+        }
+<span class="fc" id="L128">        return validMoves;</span>
+    }
+
+    /**
+     *{@return the number of pieces}
+     */
+<span class="fc" id="L134">    public int getPieceCount() { return pieces.length; }</span>
+
+    /**
+     * Returns the position of a piece by its number.
+     *
+     * @param pieceNumber the number of the piece
+     * @return the position of the piece
+     */
+<span class="fc" id="L142">    public ObjectProperty&lt;Position&gt; positionProperty(int pieceNumber) { return pieces[pieceNumber].positionProperty(); }</span>
+
+    /**
+     * Returns the type of the given piece.
+     *
+     * @param pieceNumber the number of the piece
+     * @return the type of the piece
+     */
+<span class="fc" id="L150">    public PieceType getPieceType(int pieceNumber) { return pieces[pieceNumber].getType(); }</span>
+
+    /**
+     * Returns the position of a given piece.
+     *
+     * @param pieceNumber the number of the piece
+     * @return the position of the piece
+     */
+<span class="fc" id="L158">    public Position getPiecePosition(int pieceNumber) { return pieces[pieceNumber].getPosition(); }</span>
+
+    /**
+     * Returns the positions of all the pieces.
+     *
+     * @return the positions of the pieces
+     */
+    public List&lt;Position&gt; getPiecePositions() {
+<span class="fc" id="L166">        List&lt;Position&gt; positions = new ArrayList&lt;&gt;(pieces.length);</span>
+<span class="fc bfc" id="L167" title="All 2 branches covered.">        for (var piece : pieces) {</span>
+<span class="fc" id="L168">            positions.add(piece.getPosition());</span>
+        }
+<span class="fc" id="L170">        return positions;</span>
+    }
+
+    /**
+     * Iterates through the pieces array
+     * if it finds a win state sets {@code won} of the winning player true.
+     *
+     * @param player1 first player object
+     * @param player2 second player object
+     */
+    public void winPlayer(Player player1,Player player2){
+<span class="fc bfc" id="L181" title="All 2 branches covered.">        for(var p:pieces){</span>
+<span class="fc" id="L182">            winPosition(p,player1,player2);</span>
+        }
+<span class="fc" id="L184">    }</span>
+
+    /**
+     * Checks whether a piece is in a winning state
+     * if it is then sets {@code won} of the winning player true.
+     *
+     * @param piece a piece from pieces
+     * @param player1 first player object
+     * @param player2 second player object
+     */
+    private void winPosition(Piece piece,Player player1 ,Player player2) {
+<span class="fc bfc" id="L195" title="All 2 branches covered.">        if(piece.getType() == PieceType.BLUE) {</span>
+<span class="pc bpc" id="L196" title="3 of 4 branches missed.">            if(getPieceTypeDown(piece) == PieceType.BLUE &amp;&amp; getPieceTypeUp(piece) == PieceType.BLUE){</span>
+<span class="nc" id="L197">                player1.setWon(true);</span>
+<span class="pc bpc" id="L198" title="3 of 4 branches missed.">            } else if (getPieceTypeLeft(piece) == PieceType.BLUE &amp;&amp; getPieceTypeRight(piece) == PieceType.BLUE) {</span>
+<span class="nc" id="L199">                player1.setWon(true);</span>
+<span class="pc bpc" id="L200" title="3 of 4 branches missed.">            }else if (getPieceTypeUpLeft(piece) == PieceType.BLUE &amp;&amp; getPieceTypeDownRight(piece) == PieceType.BLUE) {</span>
+<span class="nc" id="L201">                player1.setWon(true);</span>
+<span class="pc bpc" id="L202" title="3 of 4 branches missed.">            }else if (getPieceTypeUpRight(piece) == PieceType.BLUE &amp;&amp; getPieceTypeDownLeft(piece) == PieceType.BLUE) {</span>
+<span class="nc" id="L203">                player1.setWon(true);</span>
+            }
+        }
+<span class="fc bfc" id="L206" title="All 2 branches covered.">        if(piece.getType() == PieceType.RED) {</span>
+<span class="pc bpc" id="L207" title="3 of 4 branches missed.">            if(getPieceTypeDown(piece) == PieceType.RED &amp;&amp; getPieceTypeUp(piece) == PieceType.RED){</span>
+<span class="nc" id="L208">                player2.setWon(true);</span>
+<span class="pc bpc" id="L209" title="3 of 4 branches missed.">            } else if (getPieceTypeLeft(piece) == PieceType.RED &amp;&amp; getPieceTypeRight(piece) == PieceType.RED) {</span>
+<span class="nc" id="L210">                player2.setWon(true);</span>
+<span class="pc bpc" id="L211" title="3 of 4 branches missed.">            }else if (getPieceTypeUpLeft(piece) == PieceType.RED &amp;&amp; getPieceTypeDownRight(piece) == PieceType.RED) {</span>
+<span class="nc" id="L212">                player2.setWon(true);</span>
+<span class="pc bpc" id="L213" title="3 of 4 branches missed.">            }else if (getPieceTypeUpRight(piece) == PieceType.RED &amp;&amp; getPieceTypeDownLeft(piece) == PieceType.RED) {</span>
+<span class="nc" id="L214">                player2.setWon(true);</span>
+            }
+        }
+<span class="fc" id="L217">    }</span>
+
+    /**
+     * Returns the type of the piece of which is upper
+     * to the given piece.
+     *
+     * @param piece a Piece object
+     * @return type of the piece
+     */
+    private PieceType getPieceTypeUp(Piece piece) {
+<span class="nc" id="L227">        int pieceNum = getPieceNumber(piece.positionProperty().getValue().getUp());</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">        if(pieceNum &gt;= 0) {</span>
+<span class="nc" id="L229">            return pieces[pieceNum].getType();</span>
+        }else {
+<span class="nc" id="L231">            return null;</span>
+        }
+    }
+
+    /**
+     * Returns the type of the piece of which is bottom
+     * to the given piece.
+     *
+     * @param piece a Piece object
+     * @return type of the piece
+     */
+    private PieceType getPieceTypeDown(Piece piece) {
+<span class="fc" id="L243">        int pieceNum = getPieceNumber(piece.positionProperty().getValue().getDown());</span>
+<span class="pc bpc" id="L244" title="1 of 2 branches missed.">        if(pieceNum &gt;= 0) {</span>
+<span class="nc" id="L245">            return pieces[pieceNum].getType();</span>
+        }else {
+<span class="fc" id="L247">            return null;</span>
+        }
+    }
+
+    /**
+     * Returns the type of the piece of which is on the left
+     * to the given piece.
+     *
+     * @param piece a Piece object
+     * @return type of the piece
+     */
+    private PieceType getPieceTypeLeft(Piece piece) {
+<span class="fc" id="L259">        int pieceNum = getPieceNumber(piece.positionProperty().getValue().getLeft());</span>
+<span class="fc bfc" id="L260" title="All 2 branches covered.">        if(pieceNum &gt;= 0) {</span>
+<span class="fc" id="L261">            return pieces[pieceNum].getType();</span>
+        }else {
+<span class="fc" id="L263">            return null;</span>
+        }
+    }
+
+    /**
+     * Returns the type of the piece of which is on the right
+     * to the given piece.
+     *
+     * @param piece a Piece object
+     * @return type of the piece
+     */
+    private PieceType getPieceTypeRight(Piece piece) {
+<span class="nc" id="L275">        int pieceNum = getPieceNumber(piece.positionProperty().getValue().getRight());</span>
+<span class="nc bnc" id="L276" title="All 2 branches missed.">        if(pieceNum &gt;= 0) {</span>
+<span class="nc" id="L277">            return pieces[pieceNum].getType();</span>
+        }else {
+<span class="nc" id="L279">            return null;</span>
+        }
+    }
+
+
+    /**
+     * Returns the type of the piece of which is on the upper right
+     * to the given piece.
+     *
+     * @param piece a Piece object
+     * @return type of the piece
+     */
+    private PieceType getPieceTypeUpRight(Piece piece) {
+<span class="fc" id="L292">        int pieceNum = getPieceNumber(piece.positionProperty().getValue().getUpRight());</span>
+<span class="pc bpc" id="L293" title="1 of 2 branches missed.">        if(pieceNum &gt;= 0) {</span>
+<span class="nc" id="L294">            return pieces[pieceNum].getType();</span>
+        }else {
+<span class="fc" id="L296">            return null;</span>
+        }
+    }
+
+
+    /**
+     * Returns the type of the piece of which is on the bottom right
+     * to the given piece.
+     *
+     * @param piece a Piece object
+     * @return type of the piece
+     */
+    private PieceType getPieceTypeDownRight(Piece piece) {
+<span class="nc" id="L309">        int pieceNum = getPieceNumber(piece.positionProperty().getValue().getDownRight());</span>
+<span class="nc bnc" id="L310" title="All 2 branches missed.">        if(pieceNum &gt;= 0) {</span>
+<span class="nc" id="L311">            return pieces[pieceNum].getType();</span>
+        }else {
+<span class="nc" id="L313">            return null;</span>
+        }
+    }
+
+
+    /**
+     * Returns the type of the piece of which is on the upper left
+     * to the given piece.
+     *
+     * @param piece a Piece object
+     * @return type of the piece
+     */
+    private PieceType getPieceTypeUpLeft(Piece piece) {
+<span class="fc" id="L326">        int pieceNum = getPieceNumber(piece.positionProperty().getValue().getUpLeft());</span>
+<span class="pc bpc" id="L327" title="1 of 2 branches missed.">        if(pieceNum &gt;= 0) {</span>
+<span class="nc" id="L328">            return pieces[pieceNum].getType();</span>
+        }else {
+<span class="fc" id="L330">            return null;</span>
+        }
+    }
+
+
+    /**
+     * Returns the type of the piece of which is on the bottom left
+     * to the given piece.
+     *
+     * @param piece a Piece object
+     * @return type of the piece
+     */
+    private PieceType getPieceTypeDownLeft(Piece piece) {
+<span class="nc" id="L343">        int pieceNum = getPieceNumber(piece.positionProperty().getValue().getDownLeft());</span>
+<span class="nc bnc" id="L344" title="All 2 branches missed.">        if(pieceNum &gt;= 0) {</span>
+<span class="nc" id="L345">            return pieces[pieceNum].getType();</span>
+        }else {
+<span class="nc" id="L347">            return null;</span>
+        }
+    }
+
+    /**
+     * Returns the number of the piece to a given position.
+     * If it doesn't find it returns -1.
+     *
+     * @param position a Position object
+     * @return the number of the piece
+     */
+    public int getPieceNumber(Position position) {
+<span class="fc bfc" id="L359" title="All 2 branches covered.">        for (int i = 0; i &lt; pieces.length; i++) {</span>
+<span class="fc bfc" id="L360" title="All 2 branches covered.">            if (pieces[i].getPosition().equals(position)) {</span>
+<span class="fc" id="L361">                return i;</span>
+            }
+        }
+<span class="fc" id="L364">        return -1;</span>
+    }
+
+
+    /**
+     * Moves the given piece to a given direction.
+     * If a player moved one of his pieces the other one moves next.
+     *
+     * @param pieceNumber the number of the piece
+     * @param direction the direction to move
+     */
+    public void move(int pieceNumber, Direction direction) {
+<span class="nc bnc" id="L376" title="All 4 branches missed.">        if(pieces[pieceNumber].getType() == PieceType.BLUE &amp;&amp; !player1.isMoved()) {</span>
+<span class="nc bnc" id="L377" title="All 2 branches missed.">            if (direction == Direction.UP) {</span>
+<span class="nc bnc" id="L378" title="All 2 branches missed.">                if (canMoveUp(pieceNumber)) {</span>
+<span class="nc" id="L379">                    pieces[pieceNumber].moveTo(Direction.UP);</span>
+<span class="nc" id="L380">                    player1.setMoved(true);</span>
+<span class="nc" id="L381">                    player2.setMoved(false);</span>
+                }
+<span class="nc bnc" id="L383" title="All 2 branches missed.">            } else if (direction == Direction.DOWN) {</span>
+<span class="nc bnc" id="L384" title="All 2 branches missed.">                if (canMoveDown(pieceNumber)) {</span>
+<span class="nc" id="L385">                    pieces[pieceNumber].moveTo(Direction.DOWN);</span>
+<span class="nc" id="L386">                    player1.setMoved(true);</span>
+<span class="nc" id="L387">                    player2.setMoved(false);</span>
+                }
+<span class="nc bnc" id="L389" title="All 2 branches missed.">            } else if (direction == Direction.LEFT) {</span>
+<span class="nc bnc" id="L390" title="All 2 branches missed.">                if (canMoveLeft(pieceNumber)) {</span>
+<span class="nc" id="L391">                    pieces[pieceNumber].moveTo(Direction.LEFT);</span>
+<span class="nc" id="L392">                    player1.setMoved(true);</span>
+<span class="nc" id="L393">                    player2.setMoved(false);</span>
+                }
+<span class="nc bnc" id="L395" title="All 2 branches missed.">            } else if (direction == Direction.RIGHT) {</span>
+<span class="nc bnc" id="L396" title="All 2 branches missed.">                if (canMoveRight(pieceNumber)) {</span>
+<span class="nc" id="L397">                    pieces[pieceNumber].moveTo(Direction.RIGHT);</span>
+<span class="nc" id="L398">                    player1.setMoved(true);</span>
+<span class="nc" id="L399">                    player2.setMoved(false);</span>
+                }
+            } else {
+<span class="nc" id="L402">                throw new IllegalArgumentException();</span>
+            }
+<span class="nc bnc" id="L404" title="All 4 branches missed.">        }else if(pieces[pieceNumber].getType() == PieceType.RED &amp;&amp; !player2.isMoved()) {</span>
+<span class="nc bnc" id="L405" title="All 2 branches missed.">            if (direction == Direction.UP) {</span>
+<span class="nc bnc" id="L406" title="All 2 branches missed.">                if (canMoveUp(pieceNumber)) {</span>
+<span class="nc" id="L407">                    pieces[pieceNumber].moveTo(Direction.UP);</span>
+<span class="nc" id="L408">                    player1.setMoved(false);</span>
+<span class="nc" id="L409">                    player2.setMoved(true);</span>
+                }
+<span class="nc bnc" id="L411" title="All 2 branches missed.">            } else if (direction == Direction.DOWN) {</span>
+<span class="nc bnc" id="L412" title="All 2 branches missed.">                if (canMoveDown(pieceNumber)) {</span>
+<span class="nc" id="L413">                    pieces[pieceNumber].moveTo(Direction.DOWN);</span>
+<span class="nc" id="L414">                    player1.setMoved(false);</span>
+<span class="nc" id="L415">                    player2.setMoved(true);</span>
+                }
+<span class="nc bnc" id="L417" title="All 2 branches missed.">            } else if (direction == Direction.LEFT) {</span>
+<span class="nc bnc" id="L418" title="All 2 branches missed.">                if (canMoveLeft(pieceNumber)) {</span>
+<span class="nc" id="L419">                    pieces[pieceNumber].moveTo(Direction.LEFT);</span>
+<span class="nc" id="L420">                    player1.setMoved(false);</span>
+<span class="nc" id="L421">                    player2.setMoved(true);</span>
+                }
+<span class="nc bnc" id="L423" title="All 2 branches missed.">            } else if (direction == Direction.RIGHT) {</span>
+<span class="nc bnc" id="L424" title="All 2 branches missed.">                if (canMoveRight(pieceNumber)) {</span>
+<span class="nc" id="L425">                    pieces[pieceNumber].moveTo(Direction.RIGHT);</span>
+<span class="nc" id="L426">                    player1.setMoved(false);</span>
+<span class="nc" id="L427">                    player2.setMoved(true);</span>
+                }
+            } else {
+<span class="nc" id="L430">                throw new IllegalArgumentException();</span>
+            }
+        }
+<span class="nc" id="L433">    }</span>
+
+    /**
+     * Returns whether the piece can move up.
+     *
+     * @param pieceNumber the number of the piece
+     * @return whether it can move there
+     */
+    private boolean canMoveUp(int pieceNumber) {
+<span class="nc bnc" id="L442" title="All 4 branches missed.">        return pieces[pieceNumber].positionProperty().getValue().row() != 0 &amp;&amp; isEmpty(pieces[pieceNumber].positionProperty().getValue().getUp());</span>
+    }
+
+    /**
+     * Returns whether the piece can move down.
+     *
+     * @param pieceNumber the number of the piece
+     * @return whether it can move there
+     */
+    private boolean canMoveDown(int pieceNumber) {
+<span class="nc bnc" id="L452" title="All 4 branches missed.">        return pieces[pieceNumber].positionProperty().getValue().row() != BOARD_ROW-1 &amp;&amp; isEmpty(pieces[pieceNumber].positionProperty().getValue().getDown());</span>
+    }
+
+    /**
+     * Returns whether the piece can move left.
+     *
+     * @param pieceNumber the number of the piece
+     * @return whether it can move there
+     */
+    private boolean canMoveLeft(int pieceNumber) {
+<span class="nc bnc" id="L462" title="All 4 branches missed.">        return pieces[pieceNumber].positionProperty().getValue().col() != 0 &amp;&amp; isEmpty(pieces[pieceNumber].positionProperty().getValue().getLeft());</span>
+    }
+
+    /**
+     * Returns whether the piece can move right.
+     *
+     * @param pieceNumber the number of the piece
+     * @return whether it can move there
+     */
+    private boolean canMoveRight(int pieceNumber) {
+<span class="nc bnc" id="L472" title="All 4 branches missed.">        return pieces[pieceNumber].positionProperty().getValue().col() != BOARD_COL-1 &amp;&amp; isEmpty(pieces[pieceNumber].positionProperty().getValue().getRight());</span>
+    }
+
+    /**
+     * Returns whether a position is empty by a given position.
+     *
+     * @param position a Position object
+     * @return whether a position is empty
+     */
+    private boolean isEmpty(Position position) {
+<span class="nc bnc" id="L482" title="All 2 branches missed.">        for (var p : pieces) {</span>
+<span class="nc bnc" id="L483" title="All 2 branches missed.">            if(p.getPosition().equals(position)) {</span>
+<span class="nc" id="L484">                return false;</span>
+            }
+        }
+<span class="nc" id="L487">        return true;</span>
+    }
+
+    @Override
+    public String toString() {
+<span class="fc" id="L492">        var sj = new StringJoiner(&quot;,&quot;, &quot;[&quot;, &quot;]&quot;);</span>
+<span class="fc bfc" id="L493" title="All 2 branches covered.">        for (var piece : pieces) {</span>
+<span class="fc" id="L494">            sj.add(piece.toString());</span>
+        }
+<span class="fc" id="L496">        return sj.toString();</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

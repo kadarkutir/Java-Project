@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BoardController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">homework-project-kadarkutir</a> &gt; <a href="index.source.html" class="el_package">gui</a> &gt; <span class="el_source">BoardController.java</span></div><h1>BoardController.java</h1><pre class="source lang-java linenums">package gui;
+
+
+import board.*;
+import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import org.tinylog.Logger;
+
+import java.util.ArrayList;
+import java.util.List;
+
+<span class="nc" id="L25">public class BoardController {</span>
+
+<span class="nc" id="L27">    private enum SelectionPhase {</span>
+<span class="nc" id="L28">        SELECT_FROM,</span>
+<span class="nc" id="L29">        SELECT_TO;</span>
+
+        public SelectionPhase alter() {
+<span class="nc bnc" id="L32" title="All 3 branches missed.">            return switch (this) {</span>
+<span class="nc" id="L33">                case SELECT_FROM -&gt; SELECT_TO;</span>
+<span class="nc" id="L34">                case SELECT_TO -&gt; SELECT_FROM;</span>
+            };
+        }
+    }
+
+<span class="nc" id="L39">    private SelectionPhase selectionPhase = SelectionPhase.SELECT_FROM;</span>
+
+<span class="nc" id="L41">    private List&lt;Position&gt; selectablePositions = new ArrayList&lt;&gt;();</span>
+
+    private Position selected;
+
+<span class="nc" id="L45">    private Board model = new Board();</span>
+
+<span class="nc" id="L47">    private Player player1 = new Player(PieceType.BLUE,&quot;player1&quot;,false,false);</span>
+
+<span class="nc" id="L49">    private Player player2 = new Player(PieceType.RED,&quot;player2&quot;,false,false);</span>
+
+<span class="nc" id="L51">    private BooleanProperty player1Won = new SimpleBooleanProperty();</span>
+
+<span class="nc" id="L53">    private BooleanProperty player2Won = new SimpleBooleanProperty();</span>
+
+<span class="nc" id="L55">    private IntegerProperty numberOfMoves = new SimpleIntegerProperty();</span>
+
+    @FXML
+    private GridPane board;
+
+    @FXML
+    private Label player1Label;
+
+    @FXML
+    private Label player2Label;
+
+    @FXML
+    private TextField numberOfMovesField;
+
+
+    @FXML
+    private void initialize() {
+<span class="nc" id="L72">        createBoard();</span>
+<span class="nc" id="L73">        createPieces();</span>
+<span class="nc" id="L74">        setSelectablePositions();</span>
+<span class="nc" id="L75">        showSelectablePositions();</span>
+<span class="nc" id="L76">        registerHandlersAndListeners();</span>
+<span class="nc" id="L77">        createBindings();</span>
+<span class="nc" id="L78">    }</span>
+
+    private void createBindings() {
+<span class="nc" id="L81">        numberOfMovesField.textProperty().bind(numberOfMoves.asString());</span>
+<span class="nc" id="L82">    }</span>
+
+    private void createBoard() {
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        for (int i = 0; i &lt; board.getRowCount(); i++) {</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">            for (int j = 0; j &lt; board.getColumnCount(); j++) {</span>
+<span class="nc" id="L87">                var square = createSquare();</span>
+<span class="nc" id="L88">                board.add(square, j, i);</span>
+            }
+        }
+<span class="nc" id="L91">    }</span>
+
+    private void resetGame() {
+<span class="nc" id="L94">        model = new Board();</span>
+<span class="nc" id="L95">        player1Won.set(false);</span>
+<span class="nc" id="L96">        player2Won.set(false);</span>
+<span class="nc" id="L97">        createBoard();</span>
+<span class="nc" id="L98">    }</span>
+
+    public void setPlayer1Name(String name){
+<span class="nc" id="L101">        player1.setName(name);</span>
+<span class="nc" id="L102">        player1Label.setText(name);</span>
+<span class="nc" id="L103">    }</span>
+
+    public void setPlayer2Name(String name){
+<span class="nc" id="L106">        player2.setName(name);</span>
+<span class="nc" id="L107">        player2Label.setText(name);</span>
+<span class="nc" id="L108">    }</span>
+
+    private void registerHandlersAndListeners() {
+<span class="nc" id="L111">        player1Won.addListener(this::handleGameOverPlayer1);</span>
+<span class="nc" id="L112">        player2Won.addListener(this::handleGameOverPlayer2);</span>
+<span class="nc" id="L113">    }</span>
+
+    private StackPane createSquare() {
+<span class="nc" id="L116">        var square = new StackPane();</span>
+<span class="nc" id="L117">        square.getStyleClass().add(&quot;square&quot;);</span>
+<span class="nc" id="L118">        square.setOnMouseClicked(this::handleMouseClick);</span>
+<span class="nc" id="L119">        return square;</span>
+    }
+
+    private void createPieces() {
+<span class="nc bnc" id="L123" title="All 2 branches missed.">        for (int i = 0; i &lt; model.getPieceCount(); i++) {</span>
+<span class="nc" id="L124">            model.positionProperty(i).addListener(this::piecePositionChange);</span>
+<span class="nc" id="L125">            var piece = createPiece(Color.valueOf(model.getPieceType(i).name()));</span>
+<span class="nc" id="L126">            getSquare(model.getPiecePosition(i)).getChildren().add(piece);</span>
+        }
+<span class="nc" id="L128">    }</span>
+
+    private Circle createPiece(Color color) {
+<span class="nc" id="L131">        var piece = new Circle(25);</span>
+<span class="nc" id="L132">        piece.setFill(color);</span>
+<span class="nc" id="L133">        return piece;</span>
+    }
+
+    private void handleGameOverPlayer1(ObservableValue&lt;? extends Boolean&gt; observableValue, Boolean oldValue, Boolean newValue) {
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (newValue) {</span>
+<span class="nc" id="L138">            var alert = new Alert(Alert.AlertType.INFORMATION);</span>
+<span class="nc" id="L139">            alert.setHeaderText(&quot;End of the game&quot;);</span>
+<span class="nc" id="L140">            alert.setContentText(player1.getName() + &quot; won the game.\n Moves:&quot; + numberOfMovesField.getText());</span>
+<span class="nc" id="L141">            alert.showAndWait();</span>
+<span class="nc" id="L142">            Platform.exit();</span>
+        }
+<span class="nc" id="L144">    }</span>
+
+    private void handleGameOverPlayer2(ObservableValue&lt;? extends Boolean&gt; observableValue, Boolean oldValue, Boolean newValue) {
+<span class="nc bnc" id="L147" title="All 2 branches missed.">        if (newValue) {</span>
+<span class="nc" id="L148">            var alert = new Alert(Alert.AlertType.INFORMATION);</span>
+<span class="nc" id="L149">            alert.setHeaderText(&quot;End of the game&quot;);</span>
+<span class="nc" id="L150">            alert.setContentText(player2.getName() + &quot; won the game.\n Moves:&quot; + numberOfMovesField.getText());</span>
+<span class="nc" id="L151">            alert.showAndWait();</span>
+<span class="nc" id="L152">            Platform.exit();</span>
+        }
+<span class="nc" id="L154">    }</span>
+
+    @FXML
+    private void handleMouseClick(MouseEvent event) {
+<span class="nc" id="L158">        var square = (StackPane) event.getSource();</span>
+<span class="nc" id="L159">        var row = GridPane.getRowIndex(square);</span>
+<span class="nc" id="L160">        var col = GridPane.getColumnIndex(square);</span>
+<span class="nc" id="L161">        var position = new Position(row, col);</span>
+<span class="nc" id="L162">        Logger.debug(&quot;Click on square {}&quot;, position);</span>
+<span class="nc" id="L163">        handleClickOnSquare(position);</span>
+<span class="nc" id="L164">    }</span>
+
+    private void handleClickOnSquare(Position position) {
+<span class="nc bnc" id="L167" title="All 3 branches missed.">        switch (selectionPhase) {</span>
+            case SELECT_FROM -&gt; {
+<span class="nc bnc" id="L169" title="All 2 branches missed.">                if (selectablePositions.contains(position)) {</span>
+<span class="nc" id="L170">                    selectPosition(position);</span>
+<span class="nc" id="L171">                    alterSelectionPhase();</span>
+                }
+            }
+            case SELECT_TO -&gt; {
+<span class="nc bnc" id="L175" title="All 2 branches missed.">                if (selectablePositions.contains(position)) {</span>
+<span class="nc" id="L176">                    var pieceNumber = model.getPieceNumber(selected);</span>
+<span class="nc" id="L177">                    var direction = Direction.of(position.row() - selected.row(), position.col() - selected.col());</span>
+<span class="nc" id="L178">                    Logger.debug(&quot;Moving piece {} {}&quot;, pieceNumber, direction);</span>
+<span class="nc" id="L179">                    model.move(pieceNumber, direction);</span>
+<span class="nc" id="L180">                    numberOfMoves.set(numberOfMoves.get() + 1);</span>
+<span class="nc" id="L181">                    model.winPlayer(player1,player2);</span>
+<span class="nc bnc" id="L182" title="All 2 branches missed.">                    if(player1.isWon()){</span>
+<span class="nc" id="L183">                        player1Won.set(true);</span>
+<span class="nc bnc" id="L184" title="All 2 branches missed.">                    } else if (player2.isWon()) {</span>
+<span class="nc" id="L185">                        player2Won.set(true);</span>
+                    }
+<span class="nc" id="L187">                    deselectSelectedPosition();</span>
+<span class="nc" id="L188">                    alterSelectionPhase();</span>
+                }
+            }
+        }
+<span class="nc" id="L192">    }</span>
+
+
+    private void alterSelectionPhase() {
+<span class="nc" id="L196">        selectionPhase = selectionPhase.alter();</span>
+<span class="nc" id="L197">        hideSelectablePositions();</span>
+<span class="nc" id="L198">        setSelectablePositions();</span>
+<span class="nc" id="L199">        showSelectablePositions();</span>
+<span class="nc" id="L200">    }</span>
+
+    private void selectPosition(Position position) {
+<span class="nc" id="L203">        selected = position;</span>
+<span class="nc" id="L204">        showSelectedPosition();</span>
+<span class="nc" id="L205">    }</span>
+
+    private void showSelectedPosition() {
+<span class="nc" id="L208">        var square = getSquare(selected);</span>
+<span class="nc" id="L209">        square.getStyleClass().add(&quot;selected&quot;);</span>
+<span class="nc" id="L210">    }</span>
+
+    private void deselectSelectedPosition() {
+<span class="nc" id="L213">        hideSelectedPosition();</span>
+<span class="nc" id="L214">        selected = null;</span>
+<span class="nc" id="L215">    }</span>
+
+    private void hideSelectedPosition() {
+<span class="nc" id="L218">        var square = getSquare(selected);</span>
+<span class="nc" id="L219">        square.getStyleClass().remove(&quot;selected&quot;);</span>
+<span class="nc" id="L220">    }</span>
+
+    private void setSelectablePositions() {
+<span class="nc" id="L223">        selectablePositions.clear();</span>
+<span class="nc bnc" id="L224" title="All 3 branches missed.">        switch (selectionPhase) {</span>
+<span class="nc" id="L225">            case SELECT_FROM -&gt; selectablePositions.addAll(model.getPiecePositions());</span>
+            case SELECT_TO -&gt; {
+<span class="nc" id="L227">                var pieceNumber = model.getPieceNumber(selected);</span>
+<span class="nc bnc" id="L228" title="All 2 branches missed.">                for (var direction : model.getValidMoves(pieceNumber)) {</span>
+<span class="nc" id="L229">                    selectablePositions.add(selected.moveTo(direction));</span>
+<span class="nc" id="L230">                }</span>
+            }
+        }
+<span class="nc" id="L233">    }</span>
+
+    private void showSelectablePositions() {
+<span class="nc bnc" id="L236" title="All 2 branches missed.">        for (var selectablePosition : selectablePositions) {</span>
+<span class="nc" id="L237">            var square = getSquare(selectablePosition);</span>
+<span class="nc" id="L238">            square.getStyleClass().add(&quot;selectable&quot;);</span>
+<span class="nc" id="L239">        }</span>
+<span class="nc" id="L240">    }</span>
+
+    private void hideSelectablePositions() {
+<span class="nc bnc" id="L243" title="All 2 branches missed.">        for (var selectablePosition : selectablePositions) {</span>
+<span class="nc" id="L244">            var square = getSquare(selectablePosition);</span>
+<span class="nc" id="L245">            square.getStyleClass().remove(&quot;selectable&quot;);</span>
+<span class="nc" id="L246">        }</span>
+<span class="nc" id="L247">    }</span>
+
+    private StackPane getSquare(Position position) {
+<span class="nc bnc" id="L250" title="All 2 branches missed.">        for (var child : board.getChildren()) {</span>
+<span class="nc bnc" id="L251" title="All 4 branches missed.">            if (GridPane.getRowIndex(child) == position.row() &amp;&amp; GridPane.getColumnIndex(child) == position.col()) {</span>
+<span class="nc" id="L252">                return (StackPane) child;</span>
+            }
+<span class="nc" id="L254">        }</span>
+<span class="nc" id="L255">        throw new AssertionError();</span>
+    }
+
+    private void piecePositionChange(ObservableValue&lt;? extends Position&gt; observable, Position oldPosition, Position newPosition) {
+<span class="nc" id="L259">        Logger.debug(&quot;Move: {} -&gt; {}&quot;, oldPosition, newPosition);</span>
+<span class="nc" id="L260">        StackPane oldSquare = getSquare(oldPosition);</span>
+<span class="nc" id="L261">        StackPane newSquare = getSquare(newPosition);</span>
+<span class="nc" id="L262">        newSquare.getChildren().addAll(oldSquare.getChildren());</span>
+<span class="nc" id="L263">        oldSquare.getChildren().clear();</span>
+<span class="nc" id="L264">    }</span>
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
